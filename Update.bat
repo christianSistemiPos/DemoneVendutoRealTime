@@ -25,5 +25,5 @@ if '%errorlevel%' NEQ '0' (
 ::--------------------------------------
 net stop VendutoRealTime
 cd C:\SistemiPos\VendutoRealTime\
-C:\SistemiPos\VendutoRealTime\Installazione\utils\bin\git pull
+C:\git\bin\git pull
 net start VendutoRealTime

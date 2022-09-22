@@ -38,7 +38,7 @@ logging.basicConfig(filename='demone.log',
 
 db.generate_mapping(create_tables=True)
 
-versione_demone = "2.1"
+versione_demone = "2.0"
 if __name__ == "__main__":
     while True:
         id_cliente=""
