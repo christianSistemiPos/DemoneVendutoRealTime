@@ -23,6 +23,7 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 ::--------------------------------------
+/../git/bin/git clone https://github.com/christianSistemiPos/DemoneVendutoRealTime.git VendutoRealTime
 echo "Installazione Build Tools"
 C:\SistemiPos\VendutoRealTime\Installazione\utils\buildtools.exe
 echo "Ok."
