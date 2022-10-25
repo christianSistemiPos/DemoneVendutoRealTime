@@ -35,9 +35,9 @@ Ora siamo alla versione 1.1 STABILE
     cd C:\\sistemipos
     C:\\git\bin\git clone https://github.com/christianSistemiPos/DemoneVendutoRealTime.git VendutoRealTime
     ```
-6) Portarsi sollo C:\\sistemipos\VendutoRealTime
-7) Lanciare RunMe.bat
-8) Installare build tools e connector
+5)b) Al termine del clone spostare PDVVRT e BIN nella cartella C:\\sistemipos\VendutoRealTime
+6) Portarsi sotto C:\\sistemipos\VendutoRealTime
+7) Lanciare RunMe.bat da GUI
 ...
 9) Quando compare la selezione del punto vendita seguire i numeri, occhio che la numerazione parte da 0.
 ...
