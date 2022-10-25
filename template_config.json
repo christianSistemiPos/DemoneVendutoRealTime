@@ -3,7 +3,7 @@
         "funzionamento": "DB",
         "codice_negozio": "0003",
         "server": "",
-        "licenza": "8663107c-5439-11ed-96d7-26707271e964",
+        "licenza": "",
         "nome": "PDV Venafro"
     },
     "licenze": {
@@ -11,8 +11,8 @@
             "db_address": "mysql.stats.sistemiposreport.store",
             "db_name": "masterpos",
             "db_port": 3306,
-            "db_username": "onlinestatssp",
-            "db_password": "CyDBJ@sp@qd9KQ6"
+            "db_username": "",
+            "db_password": ""
         }
     },
     "in": {
@@ -31,8 +31,8 @@
 			"db_address": "vrt.sistemiposreport.store",
 			"db_name": "vrt_stats",
 			"db_port": 3306,
-			"db_username": "gruppo2",
-			"db_password": "Nh2z7wUhVbDYPAb"
+			"db_username": "",
+			"db_password": ""
         }
     }
 }
