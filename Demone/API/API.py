@@ -219,7 +219,6 @@ class API:
                         descrizione_anomalia = TipoAnomalia.Abort(ora_anomalia=row[2],operatore=row[1],nr_scontrino=row[4],totale=row[0])
                     )
                 )
-            
             # Storno
             anomalie_storno = []
             results = self._execute_query_DB(f"""
@@ -253,7 +252,81 @@ class API:
                         descrizione_anomalia = TipoAnomalia.Storno(ora_anomalia=row[2],operatore=row[1],descrizione=row[0],ean=row[3], valore=row[4])
                     )
                 )
-            cassa.anomalie = anomalie_abort + anomalie_storno
+            
+            # Reso
+            anomalie_reso = []
+            results = self._execute_query_DB(f"""
+                                                SELECT
+                                                    VEN_NSC As SCONTRINO,
+                                                    RTRIM(LTRIM(VEN_DSC)) AS DESCRIZIONE,
+                                                    RTRIM(LTRIM(ope_des)) AS operatore,
+                                                    VEN_tim AS ora,
+                                                    RTRIM(LTRIM(VEN_EAN)) AS EAN,
+                                                    VEN_TOT AS TOT
+                                                FROM
+                                                    vendite_stor inner join operatori on (ven_ope = ope_cpd)
+                                                where
+                                                    vendite_stor.ven_sta = 'V' 
+                                                    and vendite_stor.ven_cau = 2
+                                                    and ven_sgn = '-'
+                                                    and ven_dat = {{ts '{self.request_time}'}}
+                                                    and ven_npo='{cassa.id_cassa}' 
+                                                GROUP BY
+                                                    ope_des,
+                                                    VEN_npo,
+                                                    Ven_nsc,
+                                                    VEN_tim,
+                                                    ven_TOT,
+                                                    VEN_EAN,
+                                                    VEN_DSC
+                                            """)
+            for row in results:
+                anomalie_reso.append(
+                    Anomalia(
+                        tipo_anomalia=CodiceAnomalia.Reso,
+                        ora_anomalia=row[3], 
+                        operatore=row[2],
+                        descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+                    )
+                )
+            
+            # Reso da scontrino
+            anomalie_reso_scontrino = []
+            results = self._execute_query_DB(f"""
+                                                SELECT
+                                                    VEN_NSC As SCONTRINO,
+                                                    RTRIM(LTRIM(VEN_DSC)) AS DESCRIZIONE,
+                                                    RTRIM(LTRIM(ope_des)) AS operatore,
+                                                    VEN_tim AS ora,
+                                                    RTRIM(LTRIM(VEN_EAN)) AS EAN,
+                                                    VEN_TOT AS TOT
+                                                FROM
+                                                    vendite_stor inner join operatori on (ven_ope = ope_cpd)
+                                                where
+                                                    vendite_stor.ven_sta = 'V' 
+                                                    and vendite_stor.ven_cau = 20
+                                                    and ven_sgn = '-'
+                                                    and ven_dat = {{ts '{self.request_time}'}}
+                                                    and ven_npo='{cassa.id_cassa}' 
+                                                GROUP BY
+                                                    ope_des,
+                                                    VEN_npo,
+                                                    Ven_nsc,
+                                                    VEN_tim,
+                                                    ven_TOT,
+                                                    VEN_EAN,
+                                                    VEN_DSC
+                                            """)
+            for row in results:
+                anomalie_reso_scontrino.append(
+                    Anomalia(
+                        tipo_anomalia=CodiceAnomalia.ResoScontrino,
+                        ora_anomalia=row[3], 
+                        operatore=row[2],
+                        descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+                    )
+                )
+            cassa.anomalie = anomalie_abort + anomalie_storno + anomalie_reso + anomalie_reso_scontrino
             cassa.totale = sum(reparto.incasso for reparto in cassa.incasso_per_reparto)
             
         # Dato che le anomalie sono cassa invariante, mi prendo il generato dall'ultima iterazione

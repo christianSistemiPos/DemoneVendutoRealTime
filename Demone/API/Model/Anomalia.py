@@ -5,6 +5,8 @@ class CodiceAnomalia(Enum):
     Fidelity = "Fidelity"
     Abort = "Abort"
     Storno = "Storno"
+    Reso = "Reso"
+    RespScontrino = "Reso da scontrino"
 
 class TipoAnomalia():
     """
@@ -12,10 +14,13 @@ class TipoAnomalia():
     """
     FidelityLimite = lambda nr_fidelity, nr_volte_in_cassa: f'{nr_fidelity};{nr_volte_in_cassa}'
     
-    Abort = lambda ora_anomalia, operatore, nr_scontrino, totale: f'Alle ore {ora_anomalia}, l\'operatore {operatore} ha effettuato un aborto per lo scontrino numero: {nr_scontrino}, del valore di {totale} euro.'
+    Abort = lambda ora_anomalia, operatore, nr_scontrino, totale: f'Abort per lo scontrino numero: {nr_scontrino}, del valore di {totale} euro.'
     
-    Storno = lambda ora_anomalia, operatore, descrizione, ean, valore: f'Alle ore {ora_anomalia}, l\'operatore {operatore} ha effettuato uno storno per articolo: {descrizione}, ean: {ean}, {valore} euro.'
+    Storno = lambda ora_anomalia, operatore, descrizione, ean, valore: f'Storno per articolo: {descrizione}, ean: {ean}, {valore} euro.'
     
+    Reso = lambda scontrino,ora_anomalia, operatore, descrizione, ean, valore: f"Reso per articolo {descrizione}, ean: {ean}, {valore} euro."
+    
+    ResoScontrino = lambda scontrino,ora_anomalia, operatore, descrizione, ean, valore: f"Reso da scontrino {scontrino}, per articolo {descrizione}, ean: {ean}, {valore}."
 
 class Anomalia:
     """
