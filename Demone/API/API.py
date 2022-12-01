@@ -193,15 +193,18 @@ class API:
             anomalie_fidelity = []
             results = self._execute_query_DB(f"SELECT count (*) as cnt , LTRIM(RTRIM(VEN_CARD)) AS FID FROM vendite_stor where ven_dat = {{ts '{self.request_time} '}} and ven_dsc = 'TOTALE' and LTRIM(RTRIM(VEN_CARD)) <> '' GROUP BY ven_card HAVING count(*) > 1 ")
             fidelity = {row[1]:row[0] for row in results}
-            for fidelity, nr_volte_in_cassa in fidelity.items():
-                anomalie_fidelity.append(
-                    Anomalia(
-                        tipo_anomalia=CodiceAnomalia.Fidelity,
-                        ora_anomalia=None, 
-                        operatore="",
-                        descrizione_anomalia = TipoAnomalia.FidelityLimite(fidelity,nr_volte_in_cassa)
+            try:
+                for fidelity, nr_volte_in_cassa in fidelity.items():
+                    anomalie_fidelity.append(
+                        Anomalia(
+                            tipo_anomalia=CodiceAnomalia.Fidelity,
+                            ora_anomalia=None, 
+                            operatore="",
+                            descrizione_anomalia = TipoAnomalia.FidelityLimite(fidelity,nr_volte_in_cassa)
+                        )
                     )
-                )
+            except:
+                print("Errore durante analisi fidelity")
             
             # Abort
             anomalie_abort = []
@@ -211,15 +214,18 @@ class API:
                                                 where ven_sta In ('Z') and ven_sgn = '-' and ven_dat =  {{ts '{self.request_time}'}} and ven_npo='{cassa.id_cassa}' 
                                                 GROUP BY LTRIM(RTRIM(ope_des)),VEN_NPO,VEN_NSC,VEN_TIM
                                             """)
-            for row in results:
-                anomalie_abort.append(
-                    Anomalia(
-                        tipo_anomalia=CodiceAnomalia.Abort,
-                        ora_anomalia=row[2], 
-                        operatore=row[1],
-                        descrizione_anomalia = TipoAnomalia.Abort(ora_anomalia=row[2],operatore=row[1],nr_scontrino=row[4],totale=row[0])
+            try:
+                for row in results:
+                    anomalie_abort.append(
+                        Anomalia(
+                            tipo_anomalia=CodiceAnomalia.Abort,
+                            ora_anomalia=row[2], 
+                            operatore=row[1],
+                            descrizione_anomalia = TipoAnomalia.Abort(ora_anomalia=row[2],operatore=row[1],nr_scontrino=row[4],totale=row[0])
+                        )
                     )
-                )
+            except:
+                print("Errore durante analisi abort")
             # Storno
             anomalie_storno = []
             results = self._execute_query_DB(f"""
@@ -244,15 +250,18 @@ class API:
                                                     VEN_EAN,
                                                     VEN_DSC
                                             """)
-            for row in results:
-                anomalie_storno.append(
-                    Anomalia(
-                        tipo_anomalia=CodiceAnomalia.Storno,
-                        ora_anomalia=row[2], 
-                        operatore=row[1],
-                        descrizione_anomalia = TipoAnomalia.Storno(ora_anomalia=row[2],operatore=row[1],descrizione=row[0],ean=row[3], valore=row[4])
+            try:
+                for row in results:
+                    anomalie_storno.append(
+                        Anomalia(
+                            tipo_anomalia=CodiceAnomalia.Storno,
+                            ora_anomalia=row[2], 
+                            operatore=row[1],
+                            descrizione_anomalia = TipoAnomalia.Storno(ora_anomalia=row[2],operatore=row[1],descrizione=row[0],ean=row[3], valore=row[4])
+                        )
                     )
-                )
+            except:
+                print("Errore durante analisi storni")
             
             # Reso
             anomalie_reso = []
@@ -281,15 +290,18 @@ class API:
                                                     VEN_EAN,
                                                     VEN_DSC
                                             """)
-            for row in results:
-                anomalie_reso.append(
-                    Anomalia(
-                        tipo_anomalia=CodiceAnomalia.Reso,
-                        ora_anomalia=row[3], 
-                        operatore=row[2],
-                        descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+            try:
+                for row in results:
+                    anomalie_reso.append(
+                        Anomalia(
+                            tipo_anomalia=CodiceAnomalia.Reso,
+                            ora_anomalia=row[3], 
+                            operatore=row[2],
+                            descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+                        )
                     )
-                )
+            except:
+                print("Errore durante analisi reso")
             
             # Reso da scontrino
             anomalie_reso_scontrino = []
@@ -318,15 +330,18 @@ class API:
                                                     VEN_EAN,
                                                     VEN_DSC
                                             """)
-            for row in results:
-                anomalie_reso_scontrino.append(
-                    Anomalia(
-                        tipo_anomalia=CodiceAnomalia.ResoScontrino,
-                        ora_anomalia=row[3], 
-                        operatore=row[2],
-                        descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+            try:
+                for row in results:
+                    anomalie_reso_scontrino.append(
+                        Anomalia(
+                            tipo_anomalia=CodiceAnomalia.ResoScontrino,
+                            ora_anomalia=row[3], 
+                            operatore=row[2],
+                            descrizione_anomalia = TipoAnomalia.ResoScontrino(scontrino=row[0],ora_anomalia=row[3],operatore=row[2],descrizione=row[1],ean=row[4], valore=row[5])
+                        )
                     )
-                )
+            except:
+                print("Errore durante analisi resi da scontrino")
             cassa.anomalie = anomalie_abort + anomalie_storno + anomalie_reso + anomalie_reso_scontrino
             cassa.totale = sum(reparto.incasso for reparto in cassa.incasso_per_reparto)
             
