@@ -1,6 +1,6 @@
 from enum import Enum
 from datetime import datetime
-
+import uuid 
 class CodiceAnomalia(Enum):
     Fidelity = "Fidelity"
     Abort = "Abort"

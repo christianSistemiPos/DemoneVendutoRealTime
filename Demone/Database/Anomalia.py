@@ -3,7 +3,7 @@ from datetime import time,datetime
 from Database import db
 
 class TableAnomalia(db.Entity):
-    _table_ = "anomalie"
+    _table_ = "anomalie_vrt"
 
     id_cassa = Required(str, 100)
     id_negozio = Required(str, 100)
@@ -12,5 +12,5 @@ class TableAnomalia(db.Entity):
     operatore = Optional(str,255)
     descrizione_anomalia = Required(str)
     tipo_anomalia = Required(str,100)
-    id_anomalia = Required(datetime)
-    PrimaryKey(descrizione_anomalia, id_anomalia, tipo_anomalia)
+    id_anomalia = Required(str)
+    PrimaryKey(id_anomalia)

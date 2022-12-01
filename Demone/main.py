@@ -1,6 +1,7 @@
 
 from http.server import ThreadingHTTPServer
 import sys,os
+import uuid
 
 sys.path.append(os.getcwd())
 sys.path.append("C:\SistemiPos\VendutoRealTime\Demone")
@@ -204,7 +205,7 @@ if __name__ == "__main__":
                             ora_anomalia=anomalia.ora_anomalia,
                             operatore = anomalia.operatore,
                             descrizione_anomalia = anomalia.descrizione_anomalia,
-                            id_anomalia=datetime.now()
+                            id_anomalia=uuid.uuid4()
                         )
             db_negozio.ultimo_aggiornamento = datetime.now()
             db_negozio.versione_demone=versione_demone
