@@ -12,5 +12,4 @@ class TableAnomalia(db.Entity):
     operatore = Optional(str,255)
     descrizione_anomalia = Required(str)
     tipo_anomalia = Required(str,100)
-    id_anomalia = Required(str)
-    PrimaryKey(id_anomalia)
+    id_anomalia = PrimaryKey(str)
