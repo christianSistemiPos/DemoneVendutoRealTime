@@ -6,7 +6,7 @@ class CodiceAnomalia(Enum):
     Abort = "Abort"
     Storno = "Storno"
     Reso = "Reso"
-    RespScontrino = "Reso da scontrino"
+    ResoScontrino = "Reso da scontrino"
 
 class TipoAnomalia():
     """
