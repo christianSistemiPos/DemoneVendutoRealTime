@@ -147,6 +147,7 @@ class API:
             results = self._execute_query_DB("select rep_cod, rep_dsa  from reparti")
             reparti = {row[0]:row[1] for row in results}
             cassa.incasso_per_reparto = []
+            cassa.anomalie = []
             for cod, desc in reparti.items():
                 
                 result = self._execute_query_DB(f"select SUM(ven_tot), count(*) from vendite_stor where ven_sgn= '-' and ven_npo='{cassa.id_cassa}' and ven_sta in('V','R','S') and ven_dat = {{ts '{self.request_time} '}} and ven_rep = '{cod.strip()}' ")
