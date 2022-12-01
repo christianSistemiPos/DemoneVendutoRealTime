@@ -205,7 +205,7 @@ if __name__ == "__main__":
                             ora_anomalia=anomalia.ora_anomalia,
                             operatore = anomalia.operatore,
                             descrizione_anomalia = anomalia.descrizione_anomalia,
-                            id_anomalia=uuid.uuid4()
+                            id_anomalia=str(uuid.uuid4())
                         )
             db_negozio.ultimo_aggiornamento = datetime.now()
             db_negozio.versione_demone=versione_demone
